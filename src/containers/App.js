@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
-import './App.css';
-import Person from './Person/Person';
+import classes from './App.css';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
+import Aux from '../hoc/Aux'
+import withClass from '../hoc/withClass'
 
 class App extends Component {
+  constructor(props){
+    super(props)
+  }
   state = {
     persons: [
       { id: 1, name: 'Max', age: 28 },
@@ -33,7 +39,7 @@ class App extends Component {
     person.name = event.target.value
     const persons = [...this.state.persons]
     persons[personIndex] = person
-
+      //setState can take object like below or take function eg: setState((props)=>{return(ur code`)})
     this.setState({persons: persons})
   }
 
@@ -49,58 +55,34 @@ class App extends Component {
   }
 
   render () {
-    const style = {
-      backgroundColor: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    };
 
     let persons = null;
-    //this create a classes that stores 2 obj in the array but joined to create a single string - 'red bold'
-    // const classes = ['red','bold'].join(' ')
-
-    //if condition to make p diff color based on person array length
-    const classes = []
-    if (this.state.persons.length <= 2) {
-        classes.push('red')
-    }
-    if (this.state.persons.length <= 1) {
-      classes.push('green')
-  }
 
     if ( this.state.showPersons ) {
       persons = (
         <div>
-          {this.state.persons.map((persons, index) => {
-            return (
-              <Person
-              click = {()=>this.deletePersonHandler(index)}
-              name={persons.name}
-              age={persons.age} 
-              changed = {(event)=>this.nameChangedHandler(event, persons.id)}
-              />
-            )
-          })
-          }
+          <Persons
+            clicked = {this.deletePersonHandler}
+            persons = {this.state.persons}
+            changed = {this.nameChangedHandler}
+          />
         </div>
       );
-      style.backgroundColor= 'red'
+
     }
 
     return (
-      <div className="App">
-        <h1>Hi, I'm a React App</h1>
-        <p className = {classes.join(' ')}>This is really working!</p>
-        <button
-          style={style}
-          onClick={this.togglePersonsHandler}>Toggle Persons</button>
+      <Aux>
+        <Cockpit
+        showPersons = {this.state.showPersons}
+        personsLength = {this.state.persons.length}
+        clicked = {this.togglePersonsHandler}
+        />
         {persons}
-      </div>
+      </Aux>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default App;
+export default withClass(App, classes.App);
