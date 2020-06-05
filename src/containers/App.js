@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
-import Aux from '../hoc/Aux'
-import withClass from '../hoc/withClass'
+import Aux from '../hoc/Aux';
+import withClass from '../hoc/withClass';
+import AuthContext from '../context/auth-context'
 
 class App extends Component {
   constructor(props){
@@ -16,7 +17,8 @@ class App extends Component {
       { id: 3, name: 'Stephanie', age: 26 }
     ],
     otherState: 'some other value',
-    showPersons: false
+    showPersons: false,
+    authenticated: false
   }
 
   switchNameHandler = ( newName ) => {
@@ -54,6 +56,10 @@ class App extends Component {
     this.setState({persons: newPersons})
   }
 
+  loginHandler = () => {
+    this.setState({ authenticated: true });
+  };
+
   render () {
 
     let persons = null;
@@ -73,12 +79,18 @@ class App extends Component {
 
     return (
       <Aux>
+        <AuthContext.Provider
+        value ={{
+          authenticated: this.state.authenticated,
+          login : this.loginHandler
+        }}>
         <Cockpit
         showPersons = {this.state.showPersons}
         personsLength = {this.state.persons.length}
         clicked = {this.togglePersonsHandler}
         />
         {persons}
+        </AuthContext.Provider>
       </Aux>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
