@@ -10,6 +10,9 @@ constructor(props){
     super(props);
     this.inputElementRef = React.createRef();
 }
+
+static contextType = AuthContext;
+
 componentDidMount(){
     this.inputElementRef.current.focus();
 }
@@ -18,12 +21,10 @@ componentDidMount(){
         return (
             //instead of <Aux> can use <React.Fragment> .. Do the same
             <Aux> 
-                <AuthContext.Consumer>
-                    {context=> context.authenticated? 
+                {this.context.authenticated? 
                         <p>Authenticated!</p> :
-                        <p>Please log in again</p>
-                    }
-                </AuthContext.Consumer>
+                        <p>Please log in again</p>}
+          
                 <p onClick={this.props.clicked}>
                     I'm {this.props.name} and I am {this.props.age} years old!
                 </p>

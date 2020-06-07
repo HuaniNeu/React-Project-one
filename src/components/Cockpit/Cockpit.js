@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useContext } from 'react'
 import classes from './Cockpit.css'
 import AuthContext from '../../context/auth-context'
 
@@ -15,7 +15,8 @@ useEffect(()=>{
     };
 }, []
 );
-
+//used in functional class for getting Context
+const authContext = useContext(AuthContext);
 
 //this create a classes that stores 2 obj in the array but joined to create a single string - 'red bold'
 // const classes = ['red','bold'].join(' ')
@@ -34,13 +35,9 @@ if(props.showPerson){
         <div className = {classes.Cockpit}>
         <h1>Hi, I'm a React App</h1>
         <p className ={aClasses.join(' ')}>This is really working!</p>
-        
-        <AuthContext.Consumer>
-            {context =>
-                <button onClick = {context.login}>Log in</button>
-            }
-        </AuthContext.Consumer>
-        
+     
+        <button onClick = {authContext.login}>Log in</button>
+
         <button
           ref = {togggleBtnRef}
           className = {btnClass}
